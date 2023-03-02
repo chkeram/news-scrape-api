@@ -1,0 +1,57 @@
+version: "3.9"
+
+services:
+#  redis:
+#    image: redis:6.2.7-alpine
+#    networks:
+#      - reporting-api
+#  articles_db:
+#    container_name: articles_db
+#    image: postgres
+#    restart: always
+#    ports:
+#      - 5432:5432
+#    environment:
+#      - POSTGRES_USER=postgres
+#      - POSTGRES_PASSWORD=password
+#      - POSTGRES_DB=articles_db
+#
+#  pgadmin:
+#    container_name: pgadmin
+#    image: dpage/pgadmin4
+#    environment:
+#      - PGADMIN_DEFAULT_EMAIL=admin@admin.com
+#      - PGADMIN_DEFAULT_PASSWORD=admin
+#    ports:
+#      - 5050:80
+#    depends_on:
+#      - articles_db
+
+  news-api:
+    container_name: news-api
+    build:
+      context: .
+    command: 'hypercorn news_api.main:app --reload --bind 0.0.0.0:3000'
+#    command: 'uvicorn news_api.main:app --host 0.0.0.5 --port 8000 --reload'
+#    command: bash -c "alembic upgrade head && uvicorn main:app --host 0.0.0.0 --port 8000 --reload"
+    volumes:
+      - ./news_api:/app/news_api
+      - ./tests:/tests
+    expose:
+      - 3000:3000
+#    depends_on:
+#      - articles_db
+    environment:
+      DATABASE_SERVICE_HOST: articles_db
+      DATABASE_SERVICE_PORT: 5432
+#      CORE_DATABASE_NAME: dev
+      CORE_DATABASE_URL: "postgresql://postgres:password@articles-db:5432/dev"
+#      REDIS_URL: "redis://redis"
+#      VIRTUAL_HOST: "news-api.biglittlecode.local"
+      VIRTUAL_PORT: "3000"
+    env_file:
+      - ./env/local.env
+    networks:
+      - news-api
+networks:
+  news-api:
