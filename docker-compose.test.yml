@@ -49,8 +49,8 @@ services:
 #      REDIS_URL: "redis://redis"
 #      VIRTUAL_HOST: "news-api.biglittlecode.local"
       VIRTUAL_PORT: "3000"
-    env_file:
-      - ./env/local.env
+#    env_file:
+#      - ./env/local.env
     networks:
       - news-api
 networks:
