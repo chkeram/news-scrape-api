@@ -1,11 +1,12 @@
 import json
+import pytest
 
-from news_api.settings import Settings
-from news_api.v1_routes.api_router import Article
-
+from news_api.data.schemas import Article
+from tests.news_api.data.test_models import TestModels
 
 # noinspection PyUnresolvedReferences
 from tests.news_api.test_main import news_api_test_app
+from tests.news_api.data.test_models import db_session, valid_article
 
 mock_article = Article(body="body2", author="author", headline="headline", url="url", genre="genre")
 
@@ -22,15 +23,23 @@ def get_mock_input():
     }
 
 
+def add_seed_to_db():
+    models = TestModels()
+    models.test_article_valid(db_session, valid_article)
+
+
+@pytest.fixture(scope="module")
 def test_get_all_articles_with_mock_results(news_api_test_app):
+    add_seed_to_db()
     route = f'/v1/news'
     response = news_api_test_app.get(f'{route}')
-    assert mock_article == Article.parse_raw(response.text)
+    assert valid_article == Article.parse_raw(response.text)
 
 
 def test_post_article(news_api_test_app):
     response = news_api_test_app.post(f"/v1/", data=json.dumps(get_mock_input()))
-    # result = response.json()
     expected = Article.parse_obj(get_mock_input())
     assert response.status_code == 201
-    assert  expected == Article.parse_raw(response.text)
+    assert expected == Article.parse_raw(response.text)
+
+

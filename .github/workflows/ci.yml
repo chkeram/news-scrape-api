@@ -3,6 +3,7 @@ name: CI Unit Tests
 on:
   push:
     branches:
+      - dev
       - main
   pull_request:
     types:
