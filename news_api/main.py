@@ -2,9 +2,16 @@ import logging.config
 import os
 
 from fastapi import FastAPI, status, Depends
+from fastapi_sqlalchemy import DBSessionMiddleware, db
 
 from news_api.dependencies import get_settings
 from news_api.v1_routes import api_router as v1
+
+from news_api.data.session import get_db
+from news_api.data import models
+from news_api.data.session import engine
+
+models.Base.metadata.create_all(bind=engine)
 
 V1_PREFIX = "/v1"
 dir_name = os.path.dirname(__file__)
@@ -18,11 +25,14 @@ def get_application():
 
     return _app
 
+
 app = get_application()
 app.include_router(v1.router,
-                   # dependencies=[Depends(get_settings), Depends(get_db), Depends(get_big_query_data_store)],
-                   dependencies=[Depends(get_settings)],
+                   dependencies=[Depends(get_settings), Depends(get_db)],
+                   # dependencies=[Depends(get_settings)],
                    prefix=V1_PREFIX, tags=["news-api"])
+
+# app.add_middleware(DBSessionMiddleware, db_url=settings.DATABASE_URL)
 
 
 @app.get("/_healthcheck", status_code=status.HTTP_200_OK)
