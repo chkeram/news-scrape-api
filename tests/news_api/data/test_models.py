@@ -50,8 +50,7 @@ class TestModels:
             headline="headline",
             body="body",
             author="author",
-            genre="genre",
-            url="url"
+            genre="genre"
         )
         db_session.add(article)
         try:

@@ -10,7 +10,7 @@ class Article(Base):
     headline = Column(String)
     author = Column(String)
     body = Column(String)
-    url = Column(String)
+    url = Column(String, nullable=False)
     genre = Column(String)
     # publishedAt = Column(DateTime)
     # source_id = Column(Integer, ForeignKey("sources.id"))
