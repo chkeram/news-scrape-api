@@ -22,27 +22,22 @@ def get_mock_input():
         "genre": "opinions"
     }
 
-# def add_seed_to_db(news_api_test_app):
-#     # TODO: replace the below with adding a seed to the db directly
-#
-#     response = news_api_test_app.post(f"/v1/", data=json.dumps(get_mock_input()))
-#     assert response.status_code == 201
-#     # return Article.parse_raw(response.text)
+
+def add_seed_to_db():
+    models = TestModels()
+    return models.test_article_valid(db_session, valid_article)
 
 
 @pytest.fixture(scope="module")
 def test_get_all_articles_with_mock_results(news_api_test_app):
-    models = TestModels()
-    expected = models.test_article_valid(db_session, valid_article)
+    expected = add_seed_to_db()
     route = f'/v1/news'
     response = news_api_test_app.get(f'{route}')
-    print('-=-=-=-=-=-=-=-=-=- ', response.text)
     assert expected == Article.parse_raw(response.text)
 
 
 def test_post_article(news_api_test_app):
     response = news_api_test_app.post(f"/v1/", data=json.dumps(get_mock_input()))
-    # result = response.json()
     expected = Article.parse_obj(get_mock_input())
     assert response.status_code == 201
     assert expected == Article.parse_raw(response.text)
