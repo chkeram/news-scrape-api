@@ -44,7 +44,7 @@ def valid_article():
 
 
 class TestModels:
-    # print('--------------- ', get_settings().)
+
     def test_article_valid(self, db_session, valid_article):
         db_session.add(valid_article)
         db_session.commit()
@@ -54,6 +54,7 @@ class TestModels:
         assert article.url == "url"
         assert article.author == "author"
         assert article.genre == "genre"
+        return article
 
 
 #
