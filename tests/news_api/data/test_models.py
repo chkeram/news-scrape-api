@@ -44,13 +44,14 @@ class TestModels:
         assert article.genre == "genre"
         return article
 
-    @pytest.mark.xfail(raises=IntegrityError)
+    # @pytest.mark.xfail(raises=IntegrityError)
     def test_author_no_url(self, db_session):
         article = Article(
             headline="headline",
             body="body",
             author="author",
-            genre="genre"
+            genre="genre",
+            url="url"
         )
         db_session.add(article)
         try:
