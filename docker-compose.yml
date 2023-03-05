@@ -9,6 +9,7 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: mydatabase
+      POSTGRES_HOST: db
     ports:
       - 5432:5432
     networks:
@@ -41,6 +42,7 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: mydatabase
+      POSTGRES_HOST: db
     env_file:
       - ./env/local.env
     networks:

@@ -1,7 +1,9 @@
 import json
 
 from news_api.settings import Settings
-from news_api.v1_routes.api_router import Article
+
+
+from news_api.data.schemas import Article
 
 
 # noinspection PyUnresolvedReferences
@@ -22,10 +24,17 @@ def get_mock_input():
     }
 
 
+def add_seed_to_db(news_api_test_app):
+    response = news_api_test_app.post(f"/v1/", data=json.dumps(get_mock_input()))
+    assert response.status_code == 201
+    # return Article.parse_raw(response.text)
+
+
 def test_get_all_articles_with_mock_results(news_api_test_app):
+    add_seed_to_db(news_api_test_app)
     route = f'/v1/news'
     response = news_api_test_app.get(f'{route}')
-    assert mock_article == Article.parse_raw(response.text)
+    assert Article.parse_obj(get_mock_input()) == Article.parse_raw(response.text)
 
 
 def test_post_article(news_api_test_app):
@@ -33,4 +42,4 @@ def test_post_article(news_api_test_app):
     # result = response.json()
     expected = Article.parse_obj(get_mock_input())
     assert response.status_code == 201
-    assert  expected == Article.parse_raw(response.text)
+    assert expected == Article.parse_raw(response.text)
