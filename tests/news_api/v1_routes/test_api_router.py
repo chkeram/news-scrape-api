@@ -25,15 +25,15 @@ def get_mock_input():
 
 def add_seed_to_db():
     models = TestModels()
-    return models.test_article_valid(db_session, valid_article)
+    models.test_article_valid(db_session, valid_article)
 
 
 @pytest.fixture(scope="module")
 def test_get_all_articles_with_mock_results(news_api_test_app):
-    expected = add_seed_to_db()
+    add_seed_to_db()
     route = f'/v1/news'
     response = news_api_test_app.get(f'{route}')
-    assert expected == Article.parse_raw(response.text)
+    assert valid_article == Article.parse_raw(response.text)
 
 
 def test_post_article(news_api_test_app):

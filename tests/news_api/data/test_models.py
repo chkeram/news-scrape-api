@@ -42,7 +42,6 @@ class TestModels:
         assert article.url == "url"
         assert article.author == "author"
         assert article.genre == "genre"
-        return article
 
     # @pytest.mark.xfail(raises=IntegrityError)
     def test_author_no_url(self, db_session):
