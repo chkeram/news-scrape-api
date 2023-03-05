@@ -1,4 +1,6 @@
 import pytest
+import logging
+
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import create_engine
@@ -54,5 +56,7 @@ class TestModels:
         db_session.add(article)
         try:
             db_session.commit()
+            logging.info("()()()()()()()()()()()() CORRECT")
         except IntegrityError:
+            logging.info("()()()()()()()()()()()() Exception")
             db_session.rollback()
