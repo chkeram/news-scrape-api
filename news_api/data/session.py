@@ -1,11 +1,10 @@
 import logging
 from typing import Generator
-import os
-
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
 from news_api.dependencies import get_settings
+
 
 settings = get_settings()
 engine = create_engine(f"postgresql://{settings.POSTGRES_USER}:{settings.POSTGRES_PASSWORD}@{settings.POSTGRES_HOST}/{settings.POSTGRES_DB}")#, pool_pre_ping=True, pool_size=10)
