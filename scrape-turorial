@@ -1,0 +1,54 @@
+
+fetch('https://www.bbc.com/news')
+
+response
+
+1: ALL LINKS FOR DIFFERENT GENRES
+
+response.css(
+
+menu = response.css('ul.menu-group.menu-group--primary')
+
+secondary = menu.css('ul.menu-group.menu-group--secondary')
+
+sec_data = = secondary.get()
+
+item = secondary.css('a.menu-item__title::attr(href)').get()
+
+
+
+response.css('a.menu-item__title::attr(href)').get()
+
+# for loop through the list of links
+
+for link in response.css('a.menu-item__title::attr(href)').get():
+    yield response.follow(link, callback=self.parse)
+
+
+
+
+2: ALL LINKS FOR ARTICLES IN A SPECIFIC GENRE
+# parse the page
+
+with class: u-faux-block-link__overlay js-headline-text
+response.css('a.u-faux-block-link__overlay.js-headline-text').get()
+
+or
+
+with: data-link-name
+response.css('a[data-link-name="article"]').get()
+
+    TITLE: article_title = response.css('a.u-faux-block-link__overlay.js-headline-text::text').get()
+    Link: article_link = response.css('a.u-faux-block-link__overlay.js-headline-text::attr(href)').get()
+
+
+
+3: ARTICLE
+
+#body:
+main_content = response.css('div[id="maincontent"]')
+p_texts = [p.get() for p in p_elems]
+print(p_texts)
+
+# authors:
+response.css('address[aria-label="Contributor info"] a::text').getall()
