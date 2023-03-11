@@ -1,3 +1,7 @@
+# Enter shell for the scrapy container
+>> docker exec -it scrapy bash
+>> cd to appropriate file
+>> scrapy shell
 
 fetch('https://www.bbc.com/news')
 
@@ -15,9 +19,15 @@ sec_data = = secondary.get()
 
 item = secondary.css('a.menu-item__title::attr(href)').get()
 
-
+item = sec_sec.css('a.menu-item__title::attr(href)').get()
 
 response.css('a.menu-item__title::attr(href)').get()
+
+# BETTER WAY TO DO IT
+menu = response.css('ul.menu-group.menu-group--secondary')
+category_links = menu.css('a.menu-item__title::attr(href)').getall()
+
+
 
 # for loop through the list of links
 
@@ -52,3 +62,28 @@ print(p_texts)
 
 # authors:
 response.css('address[aria-label="Contributor info"] a::text').getall()
+
+
+
+LOGS:
+scrapy crawl myspider -s LOG_FILE=scrapy.log
+
+setting:
+class MySpider(scrapy.Spider):
+    name = 'myspider'
+    start_urls = ['http://example.com']
+
+    def parse(self, response):
+        print(f"Existing settings: {self.settings.attributes.keys()}")
+
+    # TODO: fix with Settings  https://docs.scrapy.org/en/latest/topics/settings.html#topics-settings-ref
+    # crawler API https://docs.scrapy.org/en/latest/topics/api.html
+    import scrapy
+    from scrapy.crawler import CrawlerProcess
+
+    process = CrawlerProcess(settings={
+        'FEED_URI': 'news_scraper/outputs/categories.json',  # specify the output file path
+        'FEED_FORMAT': 'json',  # specify the output format
+    })
+    process.crawl(GuardianCategorySpider)
+    process.start()
