@@ -1,5 +1,33 @@
 # news-scrape-api
 
+## Use Scrapy locally: 
+
+- Install Scrapy: `pip install scrapy`
+- You can run scrapy shell for interactive console or run the spiders locally directly
+
+### Run scrapy shell for interactive console
+
+Example: Get the links of all the news categories from theguardian.com
+```bash 
+>> fetch('https://www.theguardian.com/uk')
+>> categories = response.css('ul.menu-group.menu-group--secondary')
+>> links = categories.css('a.menu-item__title::attr(href)').getall()
+```
+
+### Run the spiders locally directly
+- Run the categories_spider.py: 
+    ```bash
+    scrapy runspider scraper/scraper/spiders/categories_spider.py -O scraper/scraper/output/categories.json
+    ```
+- Run the article_links_spider.py: 
+    ```bash
+    scrapy runspider scraper/scraper/spiders/article_spider.py -O scraper/scraper/output/articles.json
+  ```
+  
+- Run the article_spider.py: 
+  ```bash
+  scrapy runspider scraper/scraper/spiders/article_spider.py -O scraper/scraper/output/articles.json
+  ```
 
 
 ## Access Postgres DB using psql
