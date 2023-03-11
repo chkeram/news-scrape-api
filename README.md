@@ -115,7 +115,7 @@ B. Run the spiders locally directly
     ```
 - Run the article_links_spider.py: 
     ```bash
-    scrapy runspider scraper/scraper/spiders/article_spider.py -O scraper/scraper/output/articles.json
+    scrapy runspider scraper/scraper/spiders/article_links_spider.py -O scraper/scraper/output/article_links.json
   ```
   
 - Run the article_spider.py: 

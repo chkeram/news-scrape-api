@@ -1,11 +1,35 @@
 import scrapy
+import json
+from typing import List
+from functools import lru_cache
+from pydantic import BaseModel
+
+
+class CategoryUrls(BaseModel):
+    source: str
+    category_urls: List[str]
+
+
+@lru_cache()
+def parse_category_links(file_path: str):
+    with open(file_path) as f:
+        return json.load(f)
+
+
+def category_links_per_source(category_filter: str) -> CategoryUrls:
+    categories = parse_category_links(file_path='scraper/scraper/output/categories.json')
+
+    for item in categories:
+        if item['source'] == category_filter:
+            return CategoryUrls.parse_obj(item)
 
 
 class GuardianArticleLinkSpider(scrapy.Spider):
     name = 'article_links'
 
-    # TODO: unpack values from output of categories_spider.py
-    start_urls = ['https://www.theguardian.com/world']
+    categories = category_links_per_source('The Guardian')
+    start_urls = categories.category_urls
+    source = categories.source
 
     def parse(self, response):
 
@@ -17,6 +41,7 @@ class GuardianArticleLinkSpider(scrapy.Spider):
                     'genre': response.url.split('/')[-1],
                     'headline': title,
                     'url': article.css('a.u-faux-block-link__overlay.js-headline-text::attr(href)').get(),
+                    'source': self.source
                 }
 
 
