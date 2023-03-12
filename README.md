@@ -81,12 +81,12 @@ Make sure to have docker and docker-compose installed locally.
 
 2. Run the News API, Postgres DB and PGAdmin
     ```console
-    docker-compose up
+    docker-compose up news-api
     ```
 
-3. Run the scraper to retrive news articles and populate DB 
+3. Run the scraper to retrieve news articles and populate DB 
     ```console
-    todo for scraper
+    ./scripts/scrape.sh 
     ```
 
 4. To use the API , go to http://localhost:3000/docs#. To see API routes specifications, go to http://localhost:3000/openapi.json 
@@ -129,7 +129,6 @@ B. Run the spiders locally directly
 To access the Postgres DB, there are 2 options
 
 1. Using `psql` command line tool
-    ```terminal
     ```terminal 
     docker-compose exec db psql -U postgres -d mydatabase
     >> \dt
