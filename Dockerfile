@@ -16,6 +16,7 @@ FROM python-base
 
 WORKDIR $WORKDIR
 COPY news_api $WORKDIR/news-api
+COPY scraper $WORKDIR/scraper
 COPY ./tests $WORKDIR/tests
 EXPOSE 3000
 CMD hypercorn news_api.main:app --reload --bind 0.0.0.0:3000
