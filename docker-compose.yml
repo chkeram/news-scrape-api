@@ -29,6 +29,7 @@ services:
 
   news-api:
     container_name: news-api
+    hostname: news-api
     build:
       context: .
     command: 'hypercorn news_api.main:app --reload --bind 0.0.0.0:3000'
@@ -57,6 +58,10 @@ services:
       - ./scraper:/app/scraper
     env_file:
       - ./env/local.env
+    environment:
+      NEWS_API_BASE_URL: "http://news-api:3000/v1"
+    ports:
+      - "3005:3005"
     networks:
       - news-api
 

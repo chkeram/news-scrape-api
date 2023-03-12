@@ -88,8 +88,11 @@ Make sure to have docker and docker-compose installed locally.
     ```console
     ./scripts/scrape.sh 
     ```
-
-4. To use the API , go to http://localhost:3000/docs#. To see API routes specifications, go to http://localhost:3000/openapi.json 
+4. Populate the DB with the scraped articles
+    ```console
+    ./scripts/post_articles.sh 
+    ```
+5. To use the API , go to http://localhost:3000/docs#. To see API routes specifications, go to http://localhost:3000/openapi.json 
 
 
 
