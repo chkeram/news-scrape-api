@@ -17,8 +17,20 @@ class GuardianCategorySpider(scrapy.Spider):
 
 
 if __name__ == '__main__':
-    import scrapy
     from scrapy.crawler import CrawlerProcess
-    process = CrawlerProcess()
+    import json
+    from scraper.settings import get_settings
+
+    scraper_settings = get_settings()
+    process = CrawlerProcess(settings={
+        'FEED_URI': f"{scraper_settings.OUTPUT_DIR}/categories.json",
+        'FEEDS': {
+            f"{scraper_settings.OUTPUT_DIR}/categories.json": {
+                'format': 'json',
+                'encoding': 'utf8',
+                'overwrite': True
+            }
+        }
+    })
     process.crawl(GuardianCategorySpider)
     process.start()

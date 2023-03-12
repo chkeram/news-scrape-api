@@ -3,6 +3,9 @@ import json
 from typing import List
 from functools import lru_cache
 from pydantic import BaseModel
+from scraper.settings import get_settings
+
+settings = get_settings()
 
 
 class ArticleLink(BaseModel):
@@ -19,7 +22,7 @@ def parse_category_links(file_path: str):
 
 
 def article_links_per_source(category_filter: str) -> List[ArticleLink]:
-    categories = parse_category_links(file_path='scraper/scraper/output/article_links.json')
+    categories = parse_category_links(file_path=f'{settings.OUTPUT_DIR}/article_links.json')
 
     article_links = []
     for item in categories:
@@ -52,3 +55,22 @@ class GuardianArticleSpider(scrapy.Spider):
             "source": article_link.source,
             "body": content
         }
+
+
+if __name__ == '__main__':
+    from scrapy.crawler import CrawlerProcess
+    import json
+    from scraper.settings import get_settings
+
+    scraper_settings = get_settings()
+    process = CrawlerProcess(settings={
+        'FEEDS': {
+            f"{scraper_settings.OUTPUT_DIR}/articles.json": {
+                'format': 'json',
+                'encoding': 'utf8',
+                'overwrite': True
+            }
+        }
+    })
+    process.crawl(GuardianArticleSpider)
+    process.start()

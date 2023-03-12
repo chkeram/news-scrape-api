@@ -48,5 +48,17 @@ services:
     networks:
       - news-api
 
+  scraper:
+    container_name: scraper
+    build:
+      context: .
+      dockerfile: Dockerfile.scraper
+    volumes:
+      - ./scraper:/app/scraper
+    env_file:
+      - ./env/local.env
+    networks:
+      - news-api
+
 networks:
   news-api:
