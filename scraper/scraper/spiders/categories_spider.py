@@ -1,7 +1,4 @@
 import scrapy
-# from news_scraper.settings import Settings
-# from news_scraper.news_scraper.items import NewsScraperItem
-# from scrapy.loader import ItemLoader
 
 
 class GuardianCategorySpider(scrapy.Spider):
@@ -18,14 +15,13 @@ class GuardianCategorySpider(scrapy.Spider):
 
 if __name__ == '__main__':
     from scrapy.crawler import CrawlerProcess
-    import json
-    from scraper.settings import get_settings
+    from scraper.general_settings import get_settings
 
     scraper_settings = get_settings()
     process = CrawlerProcess(settings={
-        'FEED_URI': f"{scraper_settings.OUTPUT_DIR}/categories.json",
+        'FEED_URI': f"{scraper_settings.CATEGORIES_FILE}",
         'FEEDS': {
-            f"{scraper_settings.OUTPUT_DIR}/categories.json": {
+            f"{scraper_settings.CATEGORIES_FILE}": {
                 'format': 'json',
                 'encoding': 'utf8',
                 'overwrite': True
