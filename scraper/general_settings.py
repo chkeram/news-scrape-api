@@ -10,7 +10,7 @@ class Settings(BaseSettings):
     ARTICLE_LINKS_FILE = f"{OUTPUT_DIR}/article_links.json"
     ARTICLES_FILE = f"{OUTPUT_DIR}/articles.json"
     SOURCES = ['The Guardian', 'The New York Times', 'The Washington Post']
-    NEWS_API_BASE_URL = "https://localhost:3000/v1/"
+    NEWS_API_BASE_URL = "http://news-api:3000/v1/"
 
     class Config:
         env_file = os.path.join(os.path.dirname(__file__), "../env/local.env")

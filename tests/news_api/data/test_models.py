@@ -29,7 +29,8 @@ def valid_article():
         body="body",
         url="url",
         author="author",
-        genre="genre"
+        genre="genre",
+        source="source"
     )
 
 
@@ -52,7 +53,8 @@ class TestModels:
             headline="headline",
             body="body",
             author="author",
-            genre="genre"
+            genre="genre",
+            source="source"
         )
         db_session.add(article)
         try:

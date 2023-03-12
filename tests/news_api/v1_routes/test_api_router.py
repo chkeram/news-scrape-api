@@ -8,7 +8,7 @@ from tests.news_api.data.test_models import TestModels
 from tests.news_api.test_main import news_api_test_app
 from tests.news_api.data.test_models import db_session, valid_article
 
-mock_article = Article(body="body2", author="author", headline="headline", url="url", genre="genre")
+mock_article = Article(body="body2", author="author", headline="headline", url="url", genre="genre", source="source")
 
 
 def get_mock_input():
@@ -19,7 +19,8 @@ def get_mock_input():
         "url": "London",
         "address": "some address",
         "logo_url": "https://www.theguardian.com/commentisfree/2023/mar/01/people-sleep-rough-britain-streets-rishi-sunak-tories",
-        "genre": "opinions"
+        "genre": "opinions",
+        "source": "The Guardian"
     }
 
 

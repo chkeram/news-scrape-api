@@ -17,3 +17,4 @@ FROM python-base
 WORKDIR $WORKDIR
 COPY scraper $WORKDIR/scraper
 COPY ./tests $WORKDIR/tests
+EXPOSE 3005

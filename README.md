@@ -83,32 +83,69 @@ Make sure to have docker and docker-compose installed locally.
     ```console
     docker-compose up news-api
     ```
+   
+    Note: If the first time it fails with the below error: Stop and run the command again. 
+    ```console
+    sqlalchemy.exc.OperationalError: (psycopg2.OperationalError) could not connect to server: Connection refused
+    news-api  |     Is the server running on host "db" (172.24.0.2) and accepting
+    news-api  |     TCP/IP connections on port 5432?
+    ```
 
-3. Run the scraper to retrieve news articles and populate DB 
+3. [Optional]  To access the DB via PGAdmin execute: 
+    ```console
+    docker-compose up pgadmin
+    ```
+    
+    Alternatively: Use of `psql`. 
+    
+    Find information on how to access the DB in the last section **Run Locally and Troubleshooting** subsection **Access Postgres DB**    
+
+
+4. Run the scraper to retrieve news articles and populate DB 
     ```console
     ./scripts/scrape.sh 
     ```
+    
+    New json files have been created under: **scraper/scraper/output** 
 
-4. To use the API , go to http://localhost:3000/docs#. To see API routes specifications, go to http://localhost:3000/openapi.json 
 
-
+5. Populate the DB with the scraped articles via reaching out the News-API POST route: ------------------------------------
+    ```console
+    ./scripts/post_articles.sh 
+    ```
+6. To use the API routes, go to http://localhost:3000/docs#. 
+   Routes:
+   1. **__Get All News__**: GET `/v1/news`:  http://localhost:3000/v1/news
+   2. **__Store Article__**: POST `/v1/`:  http://localhost:3000/v1/
+   3. [WIP] **__Get News by url__**: GET `/v1/news?url=<url>`:  http://localhost:3000/v1/news?url=<url>
+   4. [WIP] **__Get Top 5 for Genre__**: GET `/v1/news?genre=<genre>`:  http://localhost:3000/v1/news?genre=<genre>
+   
 
 ## Run Locally and Troubleshooting
-### Use Scrapy locally: 
 
-1. Install Scrapy: `pip install scrapy`
-2. You can run scrapy shell for interactive console (A) or run the spiders locally directly (B)
 
-A. Run scrapy shell for interactive console
+### Use `Scrapy` locally
+   
+   Steps:
+   1. Install Scrapy: `pip install scrapy`
+   2. You can run scrapy shell for 
+      1. `shell` interactive console 
+      2. run the spiders locally directly 
 
-Example: Get the links of all the news categories from theguardian.com
+
+#### i. Run scrapy shell for interactive console
+
+Example: 
+Get the links of all the news categories from https://www.theguardian.com/
+
 ```bash 
->> fetch('https://www.theguardian.com/uk')
->> categories = response.css('ul.menu-group.menu-group--secondary')
->> links = categories.css('a.menu-item__title::attr(href)').getall()
-```
+    >> fetch('https://www.theguardian.com/uk')
+    >> categories = response.css('ul.menu-group.menu-group--secondary')
+    >> links = categories.css('a.menu-item__title::attr(href)').getall()
+   ```
 
-B. Run the spiders locally directly
+
+#### ii. Run the spiders locally directly
 - Run the categories_spider.py: 
     ```bash
     scrapy runspider scraper/scraper/spiders/categories_spider.py -O scraper/scraper/output/categories.json
@@ -128,23 +165,25 @@ B. Run the spiders locally directly
 
 To access the Postgres DB, there are 2 options
 
-1. Using `psql` command line tool
+1. Access Postgres DB using pgAdmin
+
+   - Open pgAdmin in your browser (http://localhost:5050)
+   - Login with credentials: 
+     - Email Address: admin@example.com 
+     - Password: admin
+   - Add a new server
+   - General > Name: `db`
+   - Connection > Host to `db`
+   - Connection > Port to `5432`
+   - Connection > Username to `postgres`
+   - Connection > Password to `postgres`
+   - Click save
+
+
+
+2. Using `psql` command line tool
     ```terminal 
     docker-compose exec db psql -U postgres -d mydatabase
     >> \dt
     >> SELECT * FROM articles;
     ```
-
-2. Access Postgres DB using pgAdmin
-
-- Open pgAdmin in your browser (http://localhost:5050)
-- Add a new server
-- Set the name to `db`
-- Set the host to `db`
-- Set the port to `5432`
-- Set the username to `postgres`
-- Set the password to `postgres`
-- Click save
-
-
-

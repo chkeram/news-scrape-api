@@ -1,3 +1,5 @@
+from typing import List
+
 from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, DateTime
 from sqlalchemy.ext.declarative import declarative_base
 
@@ -12,9 +14,7 @@ class Article(Base):
     body = Column(String)
     url = Column(String, nullable=False)
     genre = Column(String)
-    # publishedAt = Column(DateTime)
-    # source_id = Column(Integer, ForeignKey("sources.id"))
-    # source = relationship("Source")
+    source = Column(String)
 
 
     # TODO: inspiration to return top5 for all genres

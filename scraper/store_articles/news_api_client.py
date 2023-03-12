@@ -32,9 +32,9 @@ class NewsApiClient:
         self.headers = headers
 
     def post_article(self, article: Article):
-        url = f"{self.news_api_base_uri}/news"
+        url = f"{self.news_api_base_uri}/"
         try:
-            req = self.http.post(url,
+            req = requests.post(url,
                                  data=article.json(),
                                  headers=self.headers)
             if req.status_code == 201:
@@ -42,5 +42,16 @@ class NewsApiClient:
             else:
                 logger.error(f"NewsApiClient.post_article(): {article} {req.status_code} {req.text}")
         except Exception as e:
-            text = f"NewsApiClient.post_article(): {article} {e}"
+            text = f"NewsApiClient.post_article(): {article.url} {e}"
+            logger.exception(text)
+
+    def get_article(self):
+        url = f"{self.news_api_base_uri}/news/"
+        try:
+            req = requests.get(url, headers=self.headers)
+            if req.status_code == 201:
+                logger.info("Article posted successfully")
+            return req.json()
+        except Exception as e:
+            text = f"NewsApiClient.get_article(): {e}"
             logger.exception(text)
