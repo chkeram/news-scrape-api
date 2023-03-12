@@ -1,0 +1,26 @@
+import os
+from functools import lru_cache
+from pydantic import BaseSettings
+
+
+class Settings(BaseSettings):
+    MOCK_API_CALLS_FOR_TESTS = False
+    OUTPUT_DIR = os.path.join(os.path.dirname(__file__), "scraper/output")
+    CATEGORIES_FILE = f"{OUTPUT_DIR}/categories.json"
+    ARTICLE_LINKS_FILE = f"{OUTPUT_DIR}/article_links.json"
+    ARTICLES_FILE = f"{OUTPUT_DIR}/articles.json"
+    SOURCES = ['The Guardian', 'The New York Times', 'The Washington Post']
+    NEWS_API_BASE_URL = "https://localhost:3000/v1/"
+
+    class Config:
+        env_file = os.path.join(os.path.dirname(__file__), "../env/local.env")
+        env_file_encoding = 'utf-8'
+
+
+@lru_cache()
+def get_settings() -> Settings:
+    return Settings()
+
+
+if __name__ == '__main__':
+    print(get_settings().dict())
