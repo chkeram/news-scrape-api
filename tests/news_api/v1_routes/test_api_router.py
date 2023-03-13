@@ -32,7 +32,7 @@ def add_seed_to_db():
 @pytest.fixture(scope="module")
 def test_get_all_articles_with_mock_results(news_api_test_app):
     add_seed_to_db()
-    route = f'/v1/news'
+    route = f'/v1/news?limit=7&offset=0'
     response = news_api_test_app.get(f'{route}')
     assert valid_article == Article.parse_raw(response.text)
 

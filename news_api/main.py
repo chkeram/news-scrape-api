@@ -8,7 +8,7 @@ from news_api.v1_routes import api_router as v1
 
 from news_api.data.session import get_db
 from news_api.data import models
-from news_api.data.session import engine
+from news_api.data.session import engine, check_postgres_connection
 
 
 V1_PREFIX = "/v1"
@@ -17,6 +17,7 @@ settings = get_settings()
 
 
 def init_db():
+    check_postgres_connection()
     models.Base.metadata.create_all(bind=engine)
 
 
@@ -32,8 +33,6 @@ app = get_application()
 app.include_router(v1.router,
                    dependencies=[Depends(get_settings), Depends(get_db)],
                    prefix=V1_PREFIX, tags=["news-api"])
-
-# app.add_middleware(DBSessionMiddleware, db_url=settings.DATABASE_URL)
 
 
 @app.get("/_healthcheck", status_code=status.HTTP_200_OK)

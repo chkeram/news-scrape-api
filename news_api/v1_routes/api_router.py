@@ -20,8 +20,8 @@ logger = logging.getLogger(__name__)
 
 
 @router.get("/news")
-def get_all_news(db: Session = Depends(get_db)):
-    return crud.get_all_article(db=db)
+def get_all_news(db: Session = Depends(get_db), limit=Query(default=7), offset=Query(default=0)):
+    return crud.get_all_article(db=db, limit=limit, offset=offset)
 
 
 @router.post("/", status_code=201, response_model=SchemaArticle)

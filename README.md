@@ -106,16 +106,17 @@ Make sure to have docker and docker-compose installed locally.
     ./scripts/scrape.sh 
     ```
     
-    New json files have been created under: **scraper/scraper/output** 
+    New json files have been created under: **scraper/scraper/output**
+    If there is any issue, you can use backup files under **scraper/scraper/output/backup**
 
 
-5. Populate the DB with the scraped articles via reaching out the News-API POST route: ------------------------------------
+5. Populate the DB with the scraped articles via reaching out the **News-API POST route**: http://localhost:3000/v1/
     ```console
     ./scripts/post_articles.sh 
     ```
 6. To use the API routes, go to http://localhost:3000/docs#. 
    Routes:
-   1. **__Get All News__**: GET `/v1/news`:  http://localhost:3000/v1/news
+   1. **__Get All News__**: GET `/v1/news`:  http://localhost:3000/v1/news?limit=7&offset=0
    2. **__Store Article__**: POST `/v1/`:  http://localhost:3000/v1/
    3. [WIP] **__Get News by url__**: GET `/v1/news?url=<url>`:  http://localhost:3000/v1/news?url=<url>
    4. [WIP] **__Get Top 5 for Genre__**: GET `/v1/news?genre=<genre>`:  http://localhost:3000/v1/news?genre=<genre>
