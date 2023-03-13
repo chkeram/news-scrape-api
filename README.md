@@ -4,7 +4,25 @@ This project is an API that scrapes news articles and stores them in a Postgres 
 Since this is a POC we perform scraping from https://www.theguardian.com/ however, it is extensible to any news website by adding new spider(s).
 
 ## How it works: 
+
+### Architecture
+
+[Here is a drawing](https://drive.google.com/file/d/1F2lxAISzHAoTwCzsdDdGDDmCHDSpIQWt/view?usp=share_link) of the architecture of the solution.
+There are 4 components:
+- News-API service: Python Service using FastAPI + SQLAlchemy to manage communication with the DB.
+- DB: PostgresSQL database 
+- Scraper: Python Service using Scrapy framework to scrape news sites + News-API client to POST articles
+- PGAdmin: To facilitate monitoring and work on the DB.
+
 ### Scraping Sequence Diagram
+
+To scrape `The Guardian` we are performing 3 scrapes: 
+1. Get all the categories (UK, World) from main page: https://www.theguardian.com/ 
+2. Per Category (e.g. https://www.theguardian.com/world)scrape the links for all the articles in the page.
+3. For every article link, crape article content
+
+Once scraping is done, the Scraper is reaching `News-API` `POST` endpoint `v1/` and the article is stored to the DB. 
+
 ```mermaid
   sequenceDiagram
       
@@ -40,6 +58,14 @@ Since this is a POC we perform scraping from https://www.theguardian.com/ howeve
 
 
 ### Retrieving Articles Sequence Diagram
+The user has 2 `GET` endpoint to use: 
+1. Get All News: `GET` `/v1/all-news`
+2. Get News by url: `GET` `/v1/news?news_link=<url>`
+
+Find more information on the next section **__Setup__** > **__Step 6__**
+
+Note: The 3rd GET route shown in the next sequence diagram is not yet released.
+
 ```mermaid
 sequenceDiagram
 
