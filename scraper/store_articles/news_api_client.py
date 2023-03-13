@@ -45,6 +45,7 @@ class NewsApiClient:
             text = f"NewsApiClient.post_article(): {article.url} {e}"
             logger.exception(text)
 
+    # USED ONLY FOR TESTING
     def get_article(self):
         url = f"{self.news_api_base_uri}/news/"
         try:
