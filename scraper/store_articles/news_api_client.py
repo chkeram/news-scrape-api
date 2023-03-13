@@ -34,7 +34,7 @@ class NewsApiClient:
     def post_article(self, article: Article):
         url = f"{self.news_api_base_uri}/"
         try:
-            req = requests.post(url,
+            req = self.http.post(url,
                                  data=article.json(),
                                  headers=self.headers)
             if req.status_code == 201:

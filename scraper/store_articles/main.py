@@ -22,9 +22,11 @@ def post_articles():
         art = Article(**article)
         articles.append(art)
         api_client.post_article(art)
-        logger.info(f"scraper.main.post_articles(): Posting article: {art.title}")
+        logger.info(f"scraper.main.post_articles(): Posting article: {art.headline}")
+        print(f"scraper.main.post_articles(): Posting article: {art.headline}")
 
     logger.info(f"scraper.main.post_articles(): Posting articles finished. Total articles posted: {len(articles)}")
+    print(f"scraper.main.post_articles(): Posting articles finished. Total articles posted: {len(articles)}")
 
 
 post_articles()
