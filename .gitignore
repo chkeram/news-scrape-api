@@ -103,11 +103,11 @@ celerybeat.pid
 *.sage.py
 
 # Environments
-.env
+#.env
 .venv
-env/
+#env/
 venv/
-ENV/
+#ENV/
 env.bak/
 venv.bak/
 
@@ -129,4 +129,7 @@ dmypy.json
 # Pyre type checker
 .pyre/
 .idea
+
+scraper/scraper/output
+!scraper/scraper/output/backup
 

@@ -2,6 +2,9 @@ import logging
 from typing import Generator
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
+import psycopg2
+import retrying
+
 
 from news_api.dependencies import get_settings
 
@@ -19,3 +22,20 @@ def get_db() -> Generator:
     finally:
         logging.info("DB session CLOSED")
         db.close()
+
+
+@retrying.retry(wait_fixed=2000, stop_max_delay=10000, stop_max_attempt_number=4)
+def check_postgres_connection():
+    """
+    Make sure DB is available on startup. Log errors if something is wrong
+    :return:
+    """
+
+    conn = psycopg2.connect(
+        host=settings.POSTGRES_HOST,
+        port=5432,
+        user=settings.POSTGRES_USER,
+        password=settings.POSTGRES_PASSWORD,
+        database=settings.POSTGRES_DB
+    )
+    conn.close()
