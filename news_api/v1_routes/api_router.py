@@ -19,9 +19,14 @@ router = APIRouter()
 logger = logging.getLogger(__name__)
 
 
+@router.get("/all-news")
+def get_all_news(db: Session = Depends(get_db), limit=Query(default=7), offset=Query(default=0)):
+    return crud.get_all_article(db=db, limit=limit, offset=offset)
+
+
 @router.get("/news")
-def get_all_news(db: Session = Depends(get_db)):
-    return crud.get_all_article(db=db)
+def get_news_by_url(db: Session = Depends(get_db), news_link: str = Query(default='')):
+    return crud.get_article_by_url(db=db, url=news_link)
 
 
 @router.post("/", status_code=201, response_model=SchemaArticle)

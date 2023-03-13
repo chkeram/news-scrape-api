@@ -3,7 +3,6 @@ from scraper.store_articles.model import Article
 from scraper.general_settings import get_settings
 import json
 import logging
-import time
 
 logger = logging.getLogger(__name__)
 
@@ -11,23 +10,23 @@ settings = get_settings()
 
 
 def post_articles():
-    logger.info("Posting Articles to news api started:")
+    logger.info("scraper.main.post_articles(): Posting Articles to News api started:")
     api_client = NewsApiClient()
-    # db_art = api_client.get_article()
-    # print(db_art)
 
     with open(settings.ARTICLES_FILE) as f:
-        logger.info("Fetching articles from file")
+        logger.info("scraper.main.post_articles(): Fetching articles from file")
         articles_json = json.load(f)
 
     articles = []
     for article in articles_json:
         art = Article(**article)
-        print('-----')
         articles.append(art)
         api_client.post_article(art)
+        logger.info(f"scraper.main.post_articles(): Posting article: {art.headline}")
+        print(f"scraper.main.post_articles(): Posting article: {art.headline}")
 
-    print(len(articles))
+    logger.info(f"scraper.main.post_articles(): Posting articles finished. Total articles posted: {len(articles)}")
+    print(f"scraper.main.post_articles(): Posting articles finished. Total articles posted: {len(articles)}")
 
 
 post_articles()

@@ -1,4 +1,5 @@
 from typing import List
+from functools import lru_cache
 
 from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, DateTime
 from sqlalchemy.ext.declarative import declarative_base
@@ -15,14 +16,3 @@ class Article(Base):
     url = Column(String, nullable=False)
     genre = Column(String)
     source = Column(String)
-
-
-    # TODO: inspiration to return top5 for all genres
-    # @staticmethod
-    # @lru_cache
-    # def expertise_slugs(session) -> set[str]:
-    #     """
-    #     Loads all expertise_slugs in all languages into a set
-    #     """
-    #     slugs = session.query(Expertise).with_entities(distinct(Expertise.expertise_slug)).all()
-    #     return set([s[0] for s in slugs])
