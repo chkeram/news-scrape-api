@@ -166,6 +166,8 @@ Example:
 Get the links of all the news categories from https://www.theguardian.com/
 
 ```bash 
+    >> cd path/to/scraper
+    >> scrapy shell
     >> fetch('https://www.theguardian.com/uk')
     >> categories = response.css('ul.menu-group.menu-group--secondary')
     >> links = categories.css('a.menu-item__title::attr(href)').getall()
