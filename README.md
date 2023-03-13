@@ -4,7 +4,25 @@ This project is an API that scrapes news articles and stores them in a Postgres 
 Since this is a POC we perform scraping from https://www.theguardian.com/ however, it is extensible to any news website by adding new spider(s).
 
 ## How it works: 
+
+### Architecture
+
+[Here is a drawing](https://drive.google.com/file/d/1F2lxAISzHAoTwCzsdDdGDDmCHDSpIQWt/view?usp=share_link) of the architecture of the solution.
+There are 4 components:
+- News-API service: Python Service using FastAPI + SQLAlchemy to manage communication with the DB.
+- DB: PostgresSQL database 
+- Scraper: Python Service using Scrapy framework to scrape news sites + News-API client to POST articles
+- PGAdmin: To facilitate monitoring and work on the DB.
+
 ### Scraping Sequence Diagram
+
+To scrape `The Guardian` we are performing 3 scrapes: 
+1. Get all the categories (UK, World) from main page: https://www.theguardian.com/ 
+2. Per Category (e.g. https://www.theguardian.com/world)scrape the links for all the articles in the page.
+3. For every article link, crape article content
+
+Once scraping is done, the Scraper is reaching `News-API` `POST` endpoint `v1/` and the article is stored to the DB. 
+
 ```mermaid
   sequenceDiagram
       
@@ -40,6 +58,14 @@ Since this is a POC we perform scraping from https://www.theguardian.com/ howeve
 
 
 ### Retrieving Articles Sequence Diagram
+The user has 2 `GET` endpoint to use: 
+1. Get All News: `GET` `/v1/all-news`
+2. Get News by url: `GET` `/v1/news?news_link=<url>`
+
+Find more information on the next section **__Setup__** > **__Step 6__**
+
+Note: The 3rd GET route shown in the next sequence diagram is not yet released.
+
 ```mermaid
 sequenceDiagram
 
@@ -188,3 +214,35 @@ To access the Postgres DB, there are 2 options
     >> \dt
     >> SELECT * FROM articles;
     ```
+   
+
+## Remaining Tasks & Production Ready changes
+
+### Remaining Tasks
+The solution is complete enough and scalable to start using for scraping other news sites.
+However, there are few tasks left to finilize and consider it a solution:
+* More logging 
+* Logging in json format to be compatible with monitoring solutions (e.g. Sentry or Datadog)
+* cleanup and add stages in dockerfiles for better performance
+* split tests of scraper and decouple CI tests
+* increase coverage of unit tests
+
+The above list is documented in [this issue](https://github.com/New-Idea-Org/news-scrape-api/issues/7).
+
+### Production & Scalability changes
+
+To consider this solution scalable and production ready I would do the following: 
+
+#### Scraper:
+  * Integrate a Task Queue (e.g. [Celery](https://github.com/celery/celery)) per News site (3 consecutive spiders per News site)
+  * Redis Cache for storing the json output of the 3 spiders. This will allow to not mount a Filesystem which is best practice for Cloud Services. 
+
+#### News-API:
+  * Add route `GET` `v1/top-news?genre=<genre>` 
+  * Integrate a Task Queue (e.g. [Celery](https://github.com/celery/celery)) to News-API for the `POST` route. Once in place it would allow the endpoint to "pass" the task and not be locked for the duration of the process. This will allow to scale up the amount of articles saved per second.
+  * Redis Cache for caching each request for 1 day. 
+
+#### Production
+To productionize the solution we will need to host the DB in a Cloud Service, use a secret manager to encode sensitive data. 
+
+Other security measures would be to make sure that `POST` get is only accessible from the Scraper and have the DB into an internal network with restricted action. 
